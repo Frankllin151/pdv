@@ -36,6 +36,8 @@ export const gastos: Gasto[] = [
 // Read
 export async function gastosFetch(token:string) 
 {
+
+  
   const res = await fetch(API_URL+"/api/gastos", {
     headers:{
       "Authorization": "Bearer "+token , 

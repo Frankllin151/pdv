@@ -38,9 +38,38 @@ export const vendas: Vendas[] = [
 
 
 //SHOW
-export async function vendasFetch(token:string) 
+export async function vendasFetch(token: string, page = 1, limit = 50) 
 {
-  const res = await fetch(API_URL+"/api/vendas", {
+  if (!API_URL) throw new Error("API_URL não configurada");
+
+  const res = await fetch(`${API_URL}/api/vendas?page=${page}&limit=${limit}`, {
+    headers:{
+      "Authorization": "Bearer "+token , 
+      "Content-Type": "application/json"
+    }
+  })
+  if(!res.ok){
+    throw new Error(`Erro ao buscar vendas: ${res.statusText}`);
+  }
+
+  const json = await res.json().catch(() => null);
+
+  // Normaliza diferentes formatos de resposta:
+  // - se API retorna array -> retorna array
+  // - se API retorna { data: [...] } ou { items: [...] } -> retorna esse array
+  // - caso contrário, retorna o json cru
+  if (Array.isArray(json)) return json;
+  if (json && Array.isArray(json.data)) return json.data;
+  if (json && Array.isArray(json.items)) return json.items;
+  return json;
+}
+
+
+/// todas as vendas : 
+
+export async function TodasvendasFetch(token:string) 
+{
+  const res = await fetch(API_URL+"/api/vendas/todas", {
     headers:{
       "Authorization": "Bearer "+token , 
       "Content-Type": "application/json"

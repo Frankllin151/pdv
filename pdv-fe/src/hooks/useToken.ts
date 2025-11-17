@@ -14,7 +14,7 @@ export function useToken(redirectToLogin = true) {
     } else {
       setToken(null);
       if (redirectToLogin) {
-        router.push("/login.html"); // redireciona automaticamente
+        router.push("/login"); // redireciona automaticamente
       }
     }
   }, [redirectToLogin, router]);
@@ -22,7 +22,7 @@ export function useToken(redirectToLogin = true) {
   const destroyToken = () => {
     localStorage.removeItem("token");
     setToken(null);
-    if (redirectToLogin) router.push("/login.html"); // logout redireciona
+    if (redirectToLogin) router.push("/login"); // logout redireciona
   };
 
   return { token, destroyToken };

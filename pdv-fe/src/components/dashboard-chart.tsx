@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { vendas as vendasData, vendasFetch } from "@/data/vendas";
+import { vendas as vendasData, TodasvendasFetch } from "@/data/vendas";
 import { gastos as gastosData, gastosFetch } from "@/data/gasto";
 import { useToken } from "@/hooks/useToken";
 
@@ -81,7 +81,7 @@ export function DashboardChart() {
   useEffect(() => {
     if (!token) return;
 
-    Promise.all([vendasFetch(token), gastosFetch(token)])
+    Promise.all([TodasvendasFetch(token), gastosFetch(token)])
       .then(([vendasData, gastosData]) => {
         setVendas(vendasData);
         setGastos(gastosData);

@@ -6,15 +6,14 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "pdvback.techgroweb.shop",
+        // produção: pdvback.techgroweb.shop 
+        hostname: "localhost",
         pathname: "/image/**", // todas as imagens dentro de /image/
       },
     ],
      unoptimized: true,
   },
-  output: "export", // Configura o Next.js para exportação estática
-  basePath: "", // Use se o app estiver em um subdiretório
-  assetPrefix: "", // Use se os assets estiverem em um CDN ou subdiretório
+ 
    
 };
 

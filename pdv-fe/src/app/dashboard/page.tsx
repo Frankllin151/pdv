@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { vendas as vendasData , vendasFetch} from '@/data/vendas';
+import { vendas as vendasData , TodasvendasFetch} from '@/data/vendas';
 import { gastos as gastosData , gastosFetch} from '@/data/gasto';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,8 @@ import { useToken } from '@/hooks/useToken';
 export default function Page() {
  
 const [vendas, setVendas] = useState(vendasData);
+
+
   const [gastos, setGastos] = useState(gastosData);
      const {token } = useToken();
 
@@ -25,7 +27,7 @@ const [vendas, setVendas] = useState(vendasData);
       useEffect(() => {
              if(!token) return;
      
-             vendasFetch(token)
+             TodasvendasFetch(token)
              .then(data => setVendas(data))
              .catch(err => console.error(err))
          })

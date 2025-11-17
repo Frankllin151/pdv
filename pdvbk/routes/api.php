@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // Vendas
 Route::middleware('auth:sanctum')->group(function(){
    Route::get("/vendas", [VendasController::class, "index"]);
+   Route::get("/vendas/todas", [VendasController::class, "TodasVendas"]);
    Route::post("/vendas/post", [VendasController::class,"create"]);
    Route::post("/venda/delete/{id}", [VendasController::class, "delete"]);
    
@@ -45,5 +46,3 @@ Route::middleware('auth:sanctum')->group(function(){
    Route::post('/produto/{id}/delete', [ProdutoController::class, 'delete']);
 });
 
-
-////3|muQxrynX9w9Tcit0VhXQsb46u5O64Cxxw5ROq4FG5b6d7518

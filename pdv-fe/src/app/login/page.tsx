@@ -17,7 +17,7 @@ export default function LoginPage() {
  const { token } = useToken();
 
 if(token){
-  router.push("/dashboard.html");
+  router.push("/dashboard");
 }
 
 const handleSubmit = async (e: React.FormEvent) => {
@@ -29,7 +29,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     // Exemplo: salvar token no localStorage
     localStorage.setItem("token", user.token);
-router.push("/dashboard.html");
+router.push("/dashboard");
   ///  localStorage.setItem("user", JSON.stringify({ id: user.id, email: user.email, name: user.name, token: user.token }));
     // Redirecionar ou atualizar estado
     

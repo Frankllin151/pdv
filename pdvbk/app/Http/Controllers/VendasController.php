@@ -10,9 +10,43 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class VendasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-       
+       $limit = $request->get("limit", 50);
+
+        $vendas = Venda::with('produtos')->orderBy('updated_at', 'desc')->paginate($limit);
+
+   // Mapear os dados
+    $data = $vendas->getCollection()->map(function ($venda) {
+        $quantities = $venda->produtos->pluck('pivot.quantidade', 'id')->toArray();
+
+        return [
+            'id' => $venda->id,
+            'totalprice' => floatval($venda->totalprice),
+            'produtos' => $venda->produtos->map(function ($produto) {
+                return [
+                    'id' => $produto->id,
+                    'nome' => $produto->nome,
+                    'preco' => $produto->preco,
+                    'imagemUrl' => $produto->imagemUrl,
+                    'quantidade' => $produto->quantidade,
+                ];
+            }),
+            'quantities' => $quantities,
+            'date' => $venda->date,
+        ];
+    });
+
+    // Substituir os itens paginados pelos transformados
+    $vendas->setCollection($data);
+
+    return response()->json($data);
+     
+    }
+
+
+    public function TodasVendas()
+    {
         $vendas = Venda::with('produtos')->orderBy('updated_at', 'desc')->get();
 
     $data = $vendas->map(function ($venda) {
@@ -37,7 +71,6 @@ class VendasController extends Controller
     });
 
     return response()->json($data);
-     
     }
 
    public function create(Request $request)
