@@ -15,6 +15,7 @@ import { Vendas } from "@/type/vendas";
 import { addVenda } from "@/data/vendas";
 import { useToken } from "@/hooks/useToken";
 import { toast } from "sonner"
+import { GeraQrCode } from "@/data/qrcodepix";
 // A tipagem CartSheetProps 
 interface CartSheetProps {
     selectedProducts: Produto[];
@@ -24,6 +25,7 @@ interface CartSheetProps {
   onClose: () => void;
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
+  onGeneratedQR: (base64: string) => void;
 }
 
 // O componente agora recebe 'quantities' como uma propriedade
@@ -34,7 +36,8 @@ export function CartSheet({
   onClearCart, 
   onClose,
   isOpen,
-  setIsOpen 
+  setIsOpen,
+onGeneratedQR
 }: CartSheetProps) {
     const { token } = useToken();
   
@@ -76,6 +79,18 @@ export function CartSheet({
   }
     };
   
+   const handleGeraQRcodePix = async () => {
+    if (!token) return;
+
+    const preco = totalPrice;
+
+    const result = await GeraQrCode(preco, token);
+
+    // exemplo do retorno: result.qr_code_base64
+    if (result?.qr_code_base64) {
+      onGeneratedQR(result.qr_code_base64);
+    }
+  };
     
     
     return (
@@ -135,7 +150,11 @@ export function CartSheet({
                         </div>
                         <Button  
                         onClick={handleFinalizePurchase}
-                         className="mt-4 w-full bg-blue-500 hover:bg-blue-600">Confirma</Button>
+                         className="mt-4 w-full bg-blue-500 hover:bg-blue-600 cursor-pointer">Confirma</Button>
+                         <Button
+                         onClick={handleGeraQRcodePix}
+                         className="mt-4 w-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
+                         >Gerar QRCode (pix)</Button>
                     </div>
                 </div>
             </SheetContent>

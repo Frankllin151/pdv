@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GastosController;
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\QrcodeGeraController;
 use App\Http\Controllers\VendasController;
 
 Route::get("/ping", function (){
@@ -30,6 +31,11 @@ Route::middleware('auth:sanctum')->group(function(){
    Route::post("/venda/delete/{id}", [VendasController::class, "delete"]);
    
 });
+
+Route::middleware('auth:sanctum')->group(function(){
+ Route::post("/gera/qrcode/pix", [QrcodeGeraController::class, "QrCodegeraPix"]);
+});
+
 // Gastos 
 Route::middleware('auth:sanctum')->group(function(){
    Route::get("/gastos", [GastosController::class, "index"]);

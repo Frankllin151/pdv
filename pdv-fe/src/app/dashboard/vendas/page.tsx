@@ -9,10 +9,13 @@ import { produtos as produtosData , produtoFetch} from '@/data/produto';
 import { showProduto } from '@/type/produto';
 import clsx from 'clsx';
 import { CartSheet } from '@/components/cart-sheet';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToken } from '@/hooks/useToken';
 export default function Page() {
       const [products, setProducts] = useState<showProduto[]>([]);
        const [isCartOpen, setIsCartOpen] = useState(false);
+       const [openDialog, setOpenDialog] = useState(false);
+       const [qrCodeBase64, setQrCodeBase64] = useState<string | null>(null);
        const { token } = useToken();
       
          
@@ -72,6 +75,12 @@ const productsToDisplay = searchTerm === ''
   setSelectedProducts([]); // esvazia os selecionados também
 };
 
+ // Função que o CartSheet vai chamar
+  const handleOpenDialog = (base64: string) => {
+    setQrCodeBase64(base64);
+    setOpenDialog(true);
+  };
+
     return (
         <div className='p-6'>
             <div className='m-4'>
@@ -94,6 +103,7 @@ const productsToDisplay = searchTerm === ''
   onClose={() => setIsCartOpen(false)}
   isOpen={isCartOpen}
   setIsOpen={setIsCartOpen}
+onGeneratedQR={handleOpenDialog}
         />
         <Input type="search" placeholder="Buscar produto..." className="max-w-sm" 
          value={searchTerm} 
@@ -101,6 +111,21 @@ const productsToDisplay = searchTerm === ''
         />
     </div>
 </div>
+<Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Pagamento via Pix</DialogTitle>
+          </DialogHeader>
+
+          {qrCodeBase64 && (
+            <img
+              src={`data:image/png;base64,${qrCodeBase64}`}
+              alt="QRCode Pix"
+              className="w-64 h-64 mx-auto"
+            />
+          )}
+        </DialogContent>
+      </Dialog>
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
                 {productsToDisplay.map((produto) => {
